@@ -5,7 +5,7 @@ import cv2
 import streamlit as st
 from streamlit_webrtc import WebRtcMode, webrtc_streamer
 
-from sample_utils.turn import get_ice_servers
+from turn import get_ice_servers
 
 _type = st.radio("Select transform type", ("noop", "cartoon", "edges", "rotate"))
 
