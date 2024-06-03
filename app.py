@@ -14,21 +14,21 @@ def main():
     st.title("Real-Time Video Stream")
 
     # Configure RTC with STUN servers 
-rtc_configuration = RTCConfiguration(
-    {
-        "iceServers": [
-            {"urls": "stun:stun.l.google.com:19302"},   # Google
-            {"urls": "stun:stun1.l.google.com:19302"}, 
-            {"urls": "stun:stun2.l.google.com:19302"},
-            {"urls": "stun:stun3.l.google.com:19302"},
-            {"urls": "stun:stun4.l.google.com:19302"}, 
-            {"urls": "stun:stun.services.mozilla.com"}, # Mozilla
-            {"urls": "stun:stun.aircall.io:3478"},      # Aircall
-            {"urls": "stun:stun.voip.eutelia.it:3478"}, # Eutelia
-            # Add more STUN servers if needed from the resources mentioned below
-        ]
-    }
-)
+    rtc_configuration = RTCConfiguration(
+        {
+            "iceServers": [
+                {"urls": "stun:stun.l.google.com:19302"},   # Google
+                {"urls": "stun:stun1.l.google.com:19302"}, 
+                {"urls": "stun:stun2.l.google.com:19302"},
+                {"urls": "stun:stun3.l.google.com:19302"},
+                {"urls": "stun:stun4.l.google.com:19302"}, 
+                {"urls": "stun:stun.services.mozilla.com"}, # Mozilla
+                {"urls": "stun:stun.aircall.io:3478"},      # Aircall
+                {"urls": "stun:stun.voip.eutelia.it:3478"}, # Eutelia
+                # Add more STUN servers if needed from the resources mentioned below
+            ]
+        }
+    )
 
     # Create the WeBRTC component
     webrtc_streamer(
