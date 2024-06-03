@@ -18,7 +18,7 @@ class VideoTransformer(VideoTransformerBase):
         return img
 
 
-ctx = webrtc_streamer(key="example", video_transformer_factory=VideoTransformer)
+ctx = webrtc_streamer(key="example", video_processor_factory=VideoTransformer)
 
 if ctx.video_transformer:
     ctx.video_transformer.threshold1 = st.slider("Threshold1", 0, 1000, 100)
