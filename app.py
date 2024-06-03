@@ -1,24 +1,35 @@
 import streamlit as st
-from streamlit_webrtc import webrtc_streamer, VideoTransformerBase, RTCConfiguration
+from streamlit_webrtc import (
+    webrtc_streamer,
+    VideoProcessorBase,
+    RTCConfiguration,
+)
 
-# Define a simple video transformer (for demonstration, does nothing)
-class IdentityTransformer(VideoTransformerBase):
-    def transform(self, frame):
+# Define a video processor (does nothing in this example)
+class VideoProcessor(VideoProcessorBase):
+    def recv(self, frame):
         return frame
 
 def main():
     st.title("Real-Time Video Stream")
 
-    # Customize RTC configuration for better connectivity (optional)
+    # Configure RTC with STUN servers 
     rtc_configuration = RTCConfiguration(
-        {"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]}
+        {
+            "iceServers": [
+                {"urls": "stun:stun.l.google.com:19302"},  # Google's public STUN server
+                {"urls": "stun:stun1.l.google.com:19302"}, 
+                {"urls": "stun:stun2.l.google.com:19302"}, 
+                # Add more STUN servers here if needed
+            ]
+        }
     )
 
-    # Create a WeBRTC component
+    # Create the WeBRTC component
     webrtc_streamer(
         key="example",
-        video_transformer_factory=IdentityTransformer,
-        rtc_configuration=rtc_configuration,  # Optional
+        video_processor_factory=VideoProcessor,
+        rtc_configuration=rtc_configuration, 
         media_stream_constraints={"video": True, "audio": False},
     )
 
