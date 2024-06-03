@@ -26,7 +26,12 @@ webrtc_streamer(
     key="cartoon",
     video_processor_factory=CartoonTransformer,
     media_stream_constraints={"video": True, "audio": False},
-    rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
+    rtc_configuration={
+        "iceServers": [
+            {"urls": ["stun:stun.l.google.com:19302"]},
+            {"urls": ["turn:akiidemo1.metered.live"], "username": "fd970fd9646be7b70f81bf94", "credential": "gLjx4qdBbk6oK99o"}
+        ]
+    },
 )
 
 st.write("Debug Information")
