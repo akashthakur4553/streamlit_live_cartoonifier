@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 import streamlit as st
-from streamlit_webrtc import webrtc_streamer, VideoTransformerBase, VideoTransformerContext
+from streamlit_webrtc import webrtc_streamer, VideoTransformerBase
 
 # Define the cartoonify function
 def cartoonify_image(img):
