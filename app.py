@@ -29,7 +29,7 @@ webrtc_streamer(
     rtc_configuration={
         "iceServers": [
             {"urls": ["stun:stun.l.google.com:19302"]},
-            {"urls": ["akiidemo1.metered.live"], "username": "fd970fd9646be7b70f81bf94", "credential": "gLjx4qdBbk6oK99o"}
+            {"urls": ["url:akiidemo1.metered.live"], "username": "fd970fd9646be7b70f81bf94", "credential": "gLjx4qdBbk6oK99o"}
         ]
     },
 )
