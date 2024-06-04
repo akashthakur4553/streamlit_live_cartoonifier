@@ -1,41 +1,29 @@
+import logging
+from pathlib import Path
+
+import av
 import streamlit as st
-import cv2
+from streamlit_webrtc import WebRtcMode, webrtc_streamer
 
-st.title("Live Webcam Feed")
+from sample_utils.turn import get_ice_servers  # Assuming this is correctly defined
 
-# Get user permission to access the webcam
-permission = st.experimental_get_session_state().get("camera_permission", False)
 
-if not permission:
-    permission = st.button("Grant Camera Access")
-    if permission:
-        st.experimental_set_session_state(camera_permission=True)
 
-if permission:
-    # Access the webcam (index 0 is usually the default)
-    camera = cv2.VideoCapture(0)
 
-    if not camera.isOpened():
-        st.error("Unable to access the webcam. Please check your camera settings and permissions.")
-    else:
-        # Create a placeholder for the live feed
-        live_feed = st.empty()
+def video_frame_callback(frame: av.VideoFrame) -> av.VideoFrame:
+    """Simple callback that just returns the input frame."""
+    return frame
 
-        while True:
-            # Read a frame from the webcam
-            ret, frame = camera.read()
 
-            if not ret:
-                st.error("Error reading frame from the webcam.")
-                break
+webrtc_ctx = webrtc_streamer(
+    key="simple-video-stream",
+    mode=WebRtcMode.SENDRECV,
+    rtc_configuration={
+        "iceServers": get_ice_servers(),
+        "iceTransportPolicy": "relay", 
+    },
+    video_frame_callback=video_frame_callback,
+    media_stream_constraints={"video": True, "audio": False},
+)
 
-            # Flip the frame horizontally
-            frame = cv2.flip(frame, 1)
-
-            # Display the frame in the Streamlit app
-            live_feed.image(frame, channels="BGR")
-
-        # Release the webcam when done
-        camera.release()
-else:
-    st.warning("Please grant camera access to use this feature.")
+st.markdown("**Simple WebRTC Video Stream**") 
