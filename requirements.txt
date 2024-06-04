@@ -4,3 +4,4 @@ streamlit_webrtc
 Pillow
 numpy
 aioice
+logging
