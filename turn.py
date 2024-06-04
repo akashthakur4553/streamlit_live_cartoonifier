@@ -18,8 +18,8 @@ def get_ice_servers():
 
     # Ref: https://www.twilio.com/docs/stun-turn/api
     try:
-        account_sid = "AC33632aa93a8aef5cdd18973197a2be57"
-        auth_token = "91ad3b18d1405d994ad75a5ce52502bf"
+        account_sid = "SKc0b7d3ea519e8192fe79432dbe9db131"
+        auth_token = "5HbsZiZeJDf5Y2wEogKWfh0AH0ezpL2P"
     except KeyError:
         logger.warning(
             "Twilio credentials are not set. Fallback to a free STUN server from Google."  # noqa: E501
