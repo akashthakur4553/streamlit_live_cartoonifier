@@ -1,42 +1,41 @@
 import streamlit as st
-from streamlit_webrtc import (
-    webrtc_streamer,
-    VideoProcessorBase,
-    RTCConfiguration,
-)
+import cv2
 
-# Define a video processor (does nothing in this example)
-class VideoProcessor(VideoProcessorBase):
-    def recv(self, frame):
-        return frame
+st.title("Live Webcam Feed")
 
-def main():
-    st.title("Real-Time Video Stream")
+# Get user permission to access the webcam
+permission = st.experimental_get_session_state().get("camera_permission", False)
 
-    # Configure RTC with STUN servers 
-    rtc_configuration = RTCConfiguration(
-        {
-            "iceServers": [
-                {"urls": "stun:stun.l.google.com:19302"},   # Google
-                {"urls": "stun:stun1.l.google.com:19302"}, 
-                {"urls": "stun:stun2.l.google.com:19302"},
-                {"urls": "stun:stun3.l.google.com:19302"},
-                {"urls": "stun:stun4.l.google.com:19302"}, 
-                {"urls": "stun:stun.services.mozilla.com"}, # Mozilla
-                {"urls": "stun:stun.aircall.io:3478"},      # Aircall
-                {"urls": "stun:stun.voip.eutelia.it:3478"}, # Eutelia
-                # Add more STUN servers if needed from the resources mentioned below
-            ]
-        }
-    )
+if not permission:
+    permission = st.button("Grant Camera Access")
+    if permission:
+        st.experimental_set_session_state(camera_permission=True)
 
-    # Create the WeBRTC component
-    webrtc_streamer(
-        key="example",
-        video_processor_factory=VideoProcessor,
-        rtc_configuration=rtc_configuration, 
-        media_stream_constraints={"video": True, "audio": False},
-    )
+if permission:
+    # Access the webcam (index 0 is usually the default)
+    camera = cv2.VideoCapture(0)
 
-if __name__ == "__main__":
-    main()
+    if not camera.isOpened():
+        st.error("Unable to access the webcam. Please check your camera settings and permissions.")
+    else:
+        # Create a placeholder for the live feed
+        live_feed = st.empty()
+
+        while True:
+            # Read a frame from the webcam
+            ret, frame = camera.read()
+
+            if not ret:
+                st.error("Error reading frame from the webcam.")
+                break
+
+            # Flip the frame horizontally
+            frame = cv2.flip(frame, 1)
+
+            # Display the frame in the Streamlit app
+            live_feed.image(frame, channels="BGR")
+
+        # Release the webcam when done
+        camera.release()
+else:
+    st.warning("Please grant camera access to use this feature.")
