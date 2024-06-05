@@ -39,14 +39,28 @@ def get_ice_servers():
 
 
 def cartoonify_image(img):
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    gray = cv2.medianBlur(gray, 5)
-    edges = cv2.adaptiveThreshold(
-        gray, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 9, 9
+ 
+    img_color = cv2.pyrDown(cv2.pyrDown(img))
+
+    for _ in range(6):
+        img_color = cv2.bilateralFilter(img_color, 9, 9, 7)
+
+    img_color = cv2.pyrUp(cv2.pyrUp(img_color))
+
+    img_edges = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
+    img_edges = cv2.medianBlur(img_edges, 7)
+
+
+    img_edges = cv2.adaptiveThreshold(
+        img_edges, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 9, 2
     )
-    color = cv2.bilateralFilter(img, 9, 300, 300)
-    cartoon = cv2.bitwise_and(color, color, mask=edges)
-    return cartoon
+
+  
+    img_edges = cv2.cvtColor(img_edges, cv2.COLOR_GRAY2RGB)
+
+    img_cartoon = cv2.bitwise_and(img_color, img_edges)
+
+    return img_cartoon
 
 
 class CartoonTransformer(VideoTransformerBase):
